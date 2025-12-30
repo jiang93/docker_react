@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 
 # copy & install dependencies
-WORKDIR '/frontend'
+WORKDIR '/docker_react'
 COPY package.json .
 RUN npm install
 
@@ -11,4 +11,4 @@ COPY . .
 RUN npm run build 
 
 FROM nginx
-COPY --from=builder /frontend/build /usr/share/nginx/html
+COPY --from=builder /docker_react/build /usr/share/nginx/html
