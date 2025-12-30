@@ -1,29 +1,27 @@
-name: Deploy docker-react
+name: Deploy docker_react
 on:
   push:
     branches:
       - main
- 
+
 jobs:
   build:
-    runs-on: ubuntu-latestS
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: docker login -u ${{ huiying530 }} -p ${{ dockerIStheBEST }}
-      - run: docker build -t cygnetops/react-test -f Dockerfile.dev .
-      - run: docker run -e CI=true cygnetops/react-test npm test
- 
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t docker_react/react-test -f Dockerfile.dev .
+      - run: docker run -e CI=true docker_react/react-test npm test
+
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
- 
+        run: zip -r docker_react.zip . -x '*.git*'
+
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v21
+        uses: einaregilsson/beanstalk-deploy@v18
         with:
-          aws_access_key: ${{ huiying530 }}
-          aws_secret_key: ${{ awsIStheBEST }}
           application_name: docker-react
-          environment_name: hui-env
+          environment_name: Dockerhui-env
           existing_bucket_name: elasticbeanstalk-us-east-1-923445559289
           region: us-east-1
           version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
+          deployment_package: docker_react.zip
