@@ -1,0 +1,12 @@
+FROM node:20-alpine
+
+# copy & install dependencies
+WORKDIR /frontend
+COPY package.json .
+RUN npm install
+
+# copy all files
+COPY . . 
+
+# startup command
+CMD ["npm", "start"]
