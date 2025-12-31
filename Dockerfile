@@ -11,4 +11,5 @@ COPY . .
 RUN npm run build 
 
 FROM nginx
+EXPOSE 80
 COPY --from=builder /docker_react/build /usr/share/nginx/html
